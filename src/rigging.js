@@ -28,8 +28,29 @@ export function calculateRigging(input) {
   const chokeFactor = method === 'choke' ? 0.8 : 1;
   const factor = Number((baseFactor * chokeFactor).toFixed(2));
   const capacity = Number((single * factor).toFixed(6));
+  if (!Number.isFinite(capacity) || capacity <= 0 || !Number.isFinite(forceKN)) {
+    return { status: 'invalid', capacity: null, factor: null, forceKN: null, utilization: null, reason: 'Deze invoer ligt buiten het rekenbereik. Controleer het lastgewicht en de WLL.' };
+  }
   const utilization = weight / capacity * 100;
-  return { ...force, factor, baseFactor, chokeFactor, capacity, utilization, status: weight > capacity ? 'overload' : utilization >= 90 ? 'close' : 'within', reason: '' };
+  // Capacity has six decimal places; its exact 90% boundary needs at most
+  // seven. Normalizing that product avoids a floating-point boundary moving
+  // an exactly 90%-loaded assembly into the wrong category.
+  const warningWeight = Number((capacity * 0.9).toFixed(7));
+  return { ...force, factor, baseFactor, chokeFactor, capacity, utilization, status: weight > capacity ? 'overload' : weight >= warningWeight ? 'close' : 'within', reason: '' };
+}
+
+// Keep the displayed percentage consistent with the unrounded decision.
+// For example, 89.999% must never look like an exact 90%, and a slight
+// overload must never be displayed as an allowed 100%.
+export function formatUtilization(result) {
+  const value = result.utilization;
+  if (value == null || !Number.isFinite(value)) return '—';
+  const rounded = Number(value.toFixed(2));
+  if (result.status === 'within' && rounded >= 90) return '<90%';
+  if (result.status === 'close' && value < 100 && rounded >= 100) return '<100%';
+  if (result.status === 'overload' && rounded <= 100) return '>100%';
+  if (value > 0 && rounded === 0) return '<0,01%';
+  return `${rounded.toLocaleString('nl-NL', { maximumFractionDigits: 2 })}%`;
 }
 
 export const EXERCISES = [

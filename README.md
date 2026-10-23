@@ -45,6 +45,14 @@ Deze repository is al ingesteld op GitHub Pages via GitHub Actions. Een nieuwe c
 3. Handmatig opnieuw publiceren: kies **Run workflow → Branch: main → Run workflow**.
 4. Open https://josvr.github.io/ABVL-VVLh/ en ververs indien nodig met **Ctrl+F5** (Mac: **Cmd+Shift+R**).
 
+### Vrije hijstekening en actuele benutting (versie 1.2)
+
+De buitenhoek en de krachtwaarden staan in een afzonderlijke rij boven de tekening. De kabels, hoekboog en krachtpijlen blijven daardoor zichtbaar bij alle instelbare hoeken. De krachtpijlen lopen op afstand evenwijdig aan de kabels.
+
+De procentmelding gaat over de **WLL van het samenstel**, niet over de trekkracht per leng: `lastgewicht ÷ WLL samenstel × 100`. Bij een last van 1.800 kg en een WLL van 2.000 kg is dat precies 90%. Bij dezelfde last en een WLL van 2.800 kg is het circa 64,29%.
+
+Geel vanaf 90% is een aandachtssignaal in deze oefenapp, geen aanvullende norm of reductiefactor uit de lesbrief. De melding toont het actuele percentage. Op 100% is de WLL volledig benut; boven 100% is die overschreden. De beslissing gebruikt het niet-afgeronde gewicht. Rond de grenswaarden voorkomt de weergave `<90%`, `<100%` of `>100%` dat afronding een andere beslissing suggereert. Bij onberekenbare aanslagsituaties verschijnt geen benuttingspercentage.
+
 ## Publiceren op GitHub Pages
 
 Beoogd adres: **https://josvr.github.io/ABVL-VVLh/**. Dit adres werkt pas nadat publicatie is geslaagd.

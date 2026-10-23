@@ -125,3 +125,54 @@ test('mobile persistent result responds to angle changes and opens full assessme
   await summary.click();
   await expect(page.getByRole('heading', { name: 'Beoordeel je hijs' })).toBeInViewport();
 });
+
+test('numeric readings stay clear of the cables and arrows on TV and phone', async ({ page }) => {
+  for (const [width, height, classroom] of [[1920, 1080, true], [1280, 720, true], [390, 844, false]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto('/');
+    if (classroom) await page.getByRole('button', { name: 'Lesmodus voor tv', exact: true }).click();
+    for (const angle of [0, 30, 45, 46, 60, 75]) {
+      await page.getByRole('button', { name: `${angle === 46 ? 45 : angle}°`, exact: true }).click();
+      if (angle === 46) { await page.locator('#angle').focus(); await page.locator('#angle').press('ArrowRight'); }
+      await expect(page.locator('.angle-reading strong')).toHaveText(`${angle}°`);
+      const legend = await page.locator('.diagram-readings').boundingBox();
+      const drawing = await page.locator('.rig-diagram > svg').boundingBox();
+      expect(legend.y + legend.height).toBeLessThanOrEqual(drawing.y);
+      await expect(page.locator('.diagram-force-arrow')).toHaveCount(2);
+      const layout = await page.evaluate(() => ({
+        overflow: document.documentElement.scrollWidth > innerWidth,
+        allVisible: [...document.querySelectorAll('.simulator-grid > .panel')].every(e => e.getBoundingClientRect().bottom <= innerHeight),
+      }));
+      expect(layout.overflow).toBe(false);
+      if (classroom) expect(layout.allVisible).toBe(true);
+    }
+  }
+});
+
+test('WLL warning and percentage update together when mass, WLL and angle change', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: '45°', exact: true }).click();
+  await page.locator('#angle').focus(); await page.locator('#angle').press('ArrowRight');
+  await expect(page.locator('.status-card')).toHaveClass(/close/);
+  await expect(page.locator('.status-card')).toContainText('90% van de WLL van het samenstel.');
+  await expect(page.locator('.utilization-label strong')).toHaveText('90%');
+  await expect(page.locator('.utilization-formula')).toHaveText('1.800 ÷ 2.000 × 100 = 90%');
+  await page.getByLabel('Gewicht van de last').fill('1799.99');
+  await expect(page.locator('.status-card')).toHaveClass(/within/);
+  await expect(page.locator('.utilization-label strong')).toHaveText('<90%');
+  await page.getByLabel('Gewicht van de last').fill('2000');
+  await expect(page.locator('.utilization-label strong')).toHaveText('100%');
+  await expect(page.locator('.margin-label')).toContainText('WLL volledig benut');
+  await page.getByLabel('Gewicht van de last').fill('2000.01');
+  await expect(page.locator('.status-card')).toHaveClass(/overload/);
+  await expect(page.locator('.utilization-label strong')).toHaveText('>100%');
+  await page.getByRole('button', { name: '30°', exact: true }).click();
+  await expect(page.locator('.status-card')).toHaveClass(/within/);
+  await expect(page.locator('.utilization-label strong')).toHaveText('71,43%');
+  await page.getByLabel('WLL van één enkele leng').fill('1000');
+  await expect(page.locator('.status-card')).toHaveClass(/overload/);
+  await expect(page.locator('.utilization-label strong')).toHaveText('142,86%');
+  await page.getByRole('button', { name: '60°', exact: true }).click();
+  await expect(page.locator('.status-card')).toHaveClass(/forbidden/);
+  await expect(page.locator('.utilization-label')).toHaveCount(0);
+});

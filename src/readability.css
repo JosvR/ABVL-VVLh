@@ -83,10 +83,6 @@
   .force-toggle svg { width: 17px; height: 17px; }
   .rig-diagram { min-height: 300px; }
   .rig-diagram > svg { max-height: 410px; }
-  .diagram-force-label { font-size: 26px; font-weight: 700; }
-  .diagram-force-pill rect { x: -65px; y: -24px; width: 130px; height: 46px; }
-  .diagram-angle-label { font-size: 25px; font-weight: 700; }
-  .diagram-angle-pill rect { x: -21px; y: -23px; width: 74px; height: 43px; }
   .diagram-weight-label { font-size: 29px; font-weight: 700; }
   .diagram-weight-label tspan { font-size: 20px; font-weight: 600; }
   .diagram-load-label rect { x: 224px; width: 152px; }
@@ -331,7 +327,6 @@
   .class-mode .force-toggle { font-size: 18px; }
   .class-mode .rig-diagram { min-height: 260px; }
   .class-mode .rig-diagram > svg { max-height: 360px; }
-  .class-mode .diagram-force-label { font-size: 28px; }
   .class-mode .diagram-weight-label { font-size: 32px; }
   .class-mode .diagram-caption { font-size: 18px; }
   .class-mode .angle-control { padding: 16px 20px 18px; }
@@ -482,4 +477,51 @@
   .class-mode .result-help { font-size: 17px; padding: 11px 16px; }
   .class-mode .result-reason-full { display: none; }
   .class-mode .result-reason-tv { display: block; }
+}
+
+/* Numeric annotations occupy their own row, outside the SVG. They cannot
+   cover a cable, the angle arc, or a force arrow at any slider position. */
+.rig-diagram {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  justify-content: stretch;
+  align-items: stretch;
+  gap: 6px;
+  padding: 10px 10px 0;
+}
+.rig-diagram > svg { align-self: center; justify-self: center; width: 100%; height: 100%; min-height: 0; }
+.diagram-readings { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; width: 100%; max-width: 720px; margin: 0 auto; }
+.diagram-readings.angle-only { grid-template-columns: minmax(0, 155px); justify-content: center; }
+.diagram-reading { border: 1px solid #dde6ec; background: #fff; border-radius: 6px; padding: 7px 4px; text-align: center; min-width: 0; }
+.diagram-reading > span { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 10px; font-weight: 600; color: #476879; line-height: 1.4; }
+.diagram-reading > strong { display: block; font-size: 19px; font-weight: 700; color: #173f55; line-height: 1.25; margin-top: 3px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.diagram-reading small { font-size: 12px; font-weight: 600; }
+.angle-reading { background: #fff5ea; border-color: #efd3bb; }
+.angle-reading > span, .angle-reading > strong { color: #a14f15; }
+.force-side-icon { width: 14px; height: 14px; flex-shrink: 0; color: #ba611d; }
+.force-side-icon.left { transform: scaleX(-1); }
+.caution-text { color: #9b6815 !important; }
+.utilization-formula { font-size: 10px; line-height: 1.5; color: #496d82; margin: 9px 0 0; overflow-wrap: anywhere; }
+.class-mode .utilization-formula { display: none; }
+@media screen and (min-width: 761px) {
+  .rig-diagram { gap: 8px; padding: 12px 16px 0; }
+  .diagram-reading { padding: 9px 5px; }
+  .diagram-reading > span { font-size: 16px; font-weight: 700; }
+  .diagram-reading > strong { font-size: 28px; }
+  .diagram-reading small { font-size: 19px; }
+  .utilization-formula { font-size: 16px; font-weight: 600; }
+  .class-mode .diagram-reading { padding: 6px 5px; }
+  .class-mode .diagram-reading > span { font-size: 17px; }
+  .class-mode .diagram-reading > strong { font-size: 32px; }
+  .class-mode .diagram-reading small { font-size: 22px; }
+  .class-mode .rig-diagram > svg { max-height: 295px; }
+}
+@media screen and (min-width: 1200px) and (max-height: 900px) {
+  .class-mode .rig-diagram { gap: 4px; padding: 8px 12px 0; }
+  .class-mode .diagram-reading { padding: 5px; }
+  .class-mode .diagram-reading > span { font-size: 16px; }
+  .class-mode .diagram-reading > strong { font-size: 26px; }
+  .class-mode .diagram-reading small { font-size: 19px; }
+  .class-mode .rig-diagram > svg { max-height: 235px; }
 }
