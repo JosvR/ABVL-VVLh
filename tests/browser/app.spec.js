@@ -84,7 +84,7 @@ test('share creates a QR, copies URL, and downloads presentation + QR', async ({
 
 test('classroom mode toggles and source PDF is available', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Lesmodus', exact: true }).click();
+  await page.getByRole('button', { name: 'Lesmodus voor tv', exact: true }).click();
   await expect(page.locator('.app-shell')).toHaveClass(/class-mode/);
   await page.getByRole('button', { name: 'Verlaat lesmodus' }).click();
   await expect(page.locator('.app-shell')).not.toHaveClass(/class-mode/);

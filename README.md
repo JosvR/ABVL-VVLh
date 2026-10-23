@@ -30,6 +30,21 @@ De browsertests gebruiken standaard `/usr/bin/chromium`. Stel `CHROMIUM_PATH` in
 - **Delen & QR-code:** kopieer de link, download een QR-code of een presentatiedia van 1920 × 1080. Het URL-veld kan worden aangepast voor andere hosting. Downloads bevatten hetzelfde adres als het invoerveld.
 - Telefoon: de beoordeling blijft onderaan zichtbaar. Tik erop om naar de volledige uitkomst te springen.
 
+### Grotere letters voor desktop en tv (versie 1.1)
+
+De desktopweergave gebruikt grotere, donkerdere tekst en meer vetgedrukte labels. Op een groot scherm staan bediening, hijssituatie en beoordeling naast elkaar. De telefoonweergave houdt de bestaande indeling en lettergroottes.
+
+Klik rechtsboven op **Lesmodus voor tv** voor klassikaal gebruik. De bediening gebruikt dan letters van circa 20–24 px en belangrijke cijfers zijn tot 86 px groot. Op een laptop die naar een tv wordt gespiegeld (bijvoorbeeld 1280 × 720 of 1366 × 768) staan lastgewicht en WLL naast elkaar, zodat de simulator, hoekbediening en beoordeling tegelijk passen. Op schermen met minder hoogte worden enkele aanvullende regels weggelaten; de rekenafspraken blijven beschikbaar via **Hoe moet ik dit lezen?** en **Zo werkt het**. Browserzoom blijft instelbaar.
+
+### Een volgende versie publiceren
+
+Deze repository is al ingesteld op GitHub Pages via GitHub Actions. Een nieuwe commit op `main` start automatisch **Test en publiceer Hijsinzicht**. De workflow test en bouwt de app en vervangt daarna de gepubliceerde website. Het webadres en bestaande QR-codes blijven gelijk.
+
+1. Open [de publicatieworkflow](https://github.com/JosvR/ABVL-VVLh/actions/workflows/deploy.yml).
+2. Controleer of de nieuwste uitvoering een groen vinkje krijgt.
+3. Handmatig opnieuw publiceren: kies **Run workflow → Branch: main → Run workflow**.
+4. Open https://josvr.github.io/ABVL-VVLh/ en ververs indien nodig met **Ctrl+F5** (Mac: **Cmd+Shift+R**).
+
 ## Publiceren op GitHub Pages
 
 Beoogd adres: **https://josvr.github.io/ABVL-VVLh/**. Dit adres werkt pas nadat publicatie is geslaagd.
